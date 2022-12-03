@@ -34,5 +34,5 @@ int MyFileSystem::write(char name[16], int blockNum, char buffer[1024]) {
 }
 
 bool MyFileSystem::checkForSufficientFreeBlocks() {
-  diskfile.seekg
+  lseek(diskfile.dec)
 }
