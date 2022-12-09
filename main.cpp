@@ -8,6 +8,7 @@
 
 #include "command.hpp"
 #include "inode.hpp"
+#include "MyFileSystem.hpp"
 
 using std::cout;
 using std::endl;
@@ -62,64 +63,68 @@ int getBlockSize(string commandStr)
 
 int main(int argc, char *argv[])
 {
-  const char *inputFilePath = argv[1];
-  const char *diskFilePath = argv[2];
-  ifstream inputFile;
-  fstream diskFile;
+  MyFileSystem fileSystem = MyFileSystem("diskderp");
+  fileSystem.create("newFile.txttttt", 8);
+  fileSystem.create("hi.txt", 2);
 
-  INode node = INode();
+  // const char *inputFilePath = argv[1];
+  // const char *diskFilePath = argv[2];
+  // ifstream inputFile;
+  // fstream diskFile;
 
-  vector<Command *> commandVector = vector<Command *>();
+  // INode node = INode();
 
-  // Check argument validity
-  if (argc != 3)
-  {
-    printf("Invalid arguments. Usage: filesim [input file] [diskfile]\n");
-    exit(1);
-  }
+  // vector<Command *> commandVector = vector<Command *>();
 
-  // Open files
-  inputFile.open(inputFilePath);
-  if (inputFile.bad())
-  {
-    printf("Error opening input file.\n");
-    exit(1);
-  }
+  // // Check argument validity
+  // if (argc != 3)
+  // {
+  //   printf("Invalid arguments. Usage: filesim [input file] [diskfile]\n");
+  //   exit(1);
+  // }
 
-  // Extract file data from inputFile
-  string diskName = "";
-  getline(inputFile, diskName);
+  // // Open files
+  // inputFile.open(inputFilePath);
+  // if (inputFile.bad())
+  // {
+  //   printf("Error opening input file.\n");
+  //   exit(1);
+  // }
 
-  string commandStr;
-  while (getline(inputFile, commandStr))
-  {
-    Command *newCommand = new Command();
+  // // Extract file data from inputFile
+  // string diskName = "";
+  // getline(inputFile, diskName);
 
-    newCommand->action = tolower(commandStr[0]);
+  // string commandStr;
+  // while (getline(inputFile, commandStr))
+  // {
+  //   Command *newCommand = new Command();
 
-    switch (newCommand->action)
-    {
-    case 'R':
-    case 'W':
-    case 'C':
-      newCommand->blockNum = getBlockSize(commandStr);
-    case 'D':
-      strcpy(newCommand->fileName, getFileName(commandStr).c_str());
-      break;
-    default:
-      break;
-    }
+  //   newCommand->action = tolower(commandStr[0]);
 
-    commandVector.push_back(newCommand);
-  }
+  //   switch (newCommand->action)
+  //   {
+  //   case 'R':
+  //   case 'W':
+  //   case 'C':
+  //     newCommand->blockNum = getBlockSize(commandStr);
+  //   case 'D':
+  //     strcpy(newCommand->fileName, getFileName(commandStr).c_str());
+  //     break;
+  //   default:
+  //     break;
+  //   }
 
-  cout << "Number of commands: " << commandVector.size() << endl;
-  for (auto command : commandVector)
-  {
-    // cout << command->action << " " << command->fileName << " " << command->blockNum << endl;
-    delete command;
-  }
+  //   commandVector.push_back(newCommand);
+  // }
 
-  inputFile.close();
+  // cout << "Number of commands: " << commandVector.size() << endl;
+  // for (auto command : commandVector)
+  // {
+  //   // cout << command->action << " " << command->fileName << " " << command->blockNum << endl;
+  //   delete command;
+  // }
+
+  // inputFile.close();
   return 0;
 }

@@ -1,14 +1,40 @@
+#if !defined(MYFILESYSTEM_HPP_)
+#define MYFILESYSTEM_HPP_
+
 #include <fstream>
+#include <exception>
+#include <string.h>
+
+#include "inode.hpp"
+
+class NotEnoughFreeBlocksException : public std::exception
+{
+  public:
+  const char *what();
+};
+
+class NoFreeINodesException : public std::exception
+{
+  public:
+  const char *what();
+};
+
+class FileNotFoundException : public std::exception
+{
+  public:
+  const char *what();
+};
 
 class MyFileSystem
 {
-
 public:
-  MyFileSystem(char diskName[16]);
+  ~MyFileSystem();
+  MyFileSystem(const MyFileSystem&);
+  MyFileSystem(const std::string diskName);
   // open the file with the above name
   // this file will act as the "disk" for your file system
 
-  int create(char name[16], int size);
+  int create(const std::string fileName, int size);
   // create a file with this name and this size
 
   // high level pseudo code for creating a new file
@@ -125,8 +151,14 @@ public:
 
   // end write
 
-  private:
+private:
   std::fstream diskfile;
 
-  bool checkForSufficientFreeBlocks();
+  int *getFreeBlocks(int size);
+  int getFreeINode();
+  int getINodeAddress(int index);
+  INode *getINode(int index);
+  void writeINodeToIndex(int index, const INode*);
 };
+
+#endif // MYFILESYSTEM_HPP_
